@@ -1,0 +1,124 @@
+
+requirements
+    all entities occupy tile
+    entities perform action each tick
+    can check for interactions with entities in same tile
+
+state: {
+    entities: [
+        //tracks what components contain data for each entity
+        //useful for deleting entities, and for quickly checking if an entity has a component
+        {
+            id: 0,
+            components: ['player', 'position', 'collision', 'solid', 'movement']
+        }
+    ],
+    position: [
+        {
+            id: 0,
+            x: 1
+        }
+    ],
+    collision: [
+        {
+            id: 0,
+            intersections: [/* list of overlapping entities */]
+            bumps: [{id: 2, 'right'}] //list of ents bumped in to with movement, with the side they're on
+        }
+    ],
+    movement: [
+        {id: n, dx: signed int}
+    ]
+    input: {left: false, right: true, etc...}
+    //unsure if needed. list of actions to do in upcoming game steps
+    actionQueue: [
+        //dispatch all actions in first array element on step, then pop that element out
+        [
+            //actions to perform this step
+            {
+                action: 'action',
+                payload: {}
+            }
+        ],
+        [
+            {action: 'action', payload: {}}
+        ]
+    ]
+}
+
+systems
+    reducer on one or more component lists
+    listen to game actions (step, input)
+    update component state
+
+render
+    react component that maps components to graphics
+
+
+action: payload
+    game.step
+    game.setInput: {inputName: true/false}
+    entity.add: {component: {optional initial props}, other components}
+    entity.remove: {ent_id}
+    component.add: {component, ent_id, initial props}
+    component.remove: {component, ent_id}
+    component.update: {component, ent_id, props}
+
+
+intersection system
+    select position from all entities with position and collision
+    on step, each in position:
+        iterate through each tile of map
+        compile array of entities in each tile
+        update collision.intersections component of each entity with array of entities sharing position
+
+damage system
+    select collision from all entities with collision and health
+    select hitbox
+    on step, each in collision:
+        filter collisions array to entities in hitbox
+        add up damage values of all hitbox components (maybe exclude for friendly/self fire)
+        update health
+        add dead component if health <= 0 (dead system[s] would do cleanup and trigger death animations, then remove entity)
+            should this sort of thing be watched for in middleware?
+
+movement system
+    select position and movement as movers from ents with position, movement
+    select position as solids from ents with position and solid
+    on step, each in movers:
+        if mover has collision component
+            //reduce movement until mover won't intersect a solid
+            //if mover is already inside a solid, it will be nudged left until it isn't
+            bumps, lastbumps = solids.filter(s => s.x = mover.x + mover.dx)
+            while bumps.length > 0
+                lastbumps = bumps
+                mover.dx > 0 ? mover.dx-- : mover.dx++
+                bumps = solids.filter(s => s.x = mover.x + mover.dx)
+            update collision.bumps to bumps
+        update position to position + movement
+
+file structure
+    app
+    game
+        index: redux slice (reducer, actions)
+    entities
+        index: redux slice
+    components
+        index: redux slice
+        //some sort of per-component data type checking system (middleware?)
+    systems
+        index: run all systems
+        intersection
+        damage
+        movement
+        etc
+    render
+        canvas
+        camera
+        background
+        //systems for drawing entities
+        player
+        enemyType1
+        enemyType2
+        damageWarning
+        fireball
