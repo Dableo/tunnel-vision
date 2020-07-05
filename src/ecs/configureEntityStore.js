@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
+import createEntityReducer from './createEntityReducer'
 
 export default function configureEntityStore({components, systems}) {
-  const componentReducer = components.reduce((obj, c) => {
-    obj[c.name] = c.reducer
-    return obj
-  }, {})
+  const reducer = createEntityReducer(components, systems)
   return configureStore({
-    reducer: componentReducer
+    reducer: reducer
   })
 }
