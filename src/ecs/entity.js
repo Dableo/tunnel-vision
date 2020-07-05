@@ -1,11 +1,17 @@
-import {createAction} from '@reduxjs/toolkit'
+import {createAction, createReducer} from '@reduxjs/toolkit'
 
-let idIterator = 0;
+const iterateId = createAction('iterateId')
 
-export const addEntity = createAction('addEntity', (components) => {
-  return {
-    payload: {id: idIterator++, components: components.map((c) => c.toString())}
-  }
-})
+export const addEntityComponents = createAction('addEntityComponents')
 
 export const removeEntity = createAction('removeEntity')
+
+export const entityReducer = createReducer({idIterator: 0}, {
+  [iterateId]: state => {state.idIterator++}
+})
+
+export const addEntity = (components) => (dispatch, getState) => {
+  const ent_id = getState()['_entities']['idIterator']
+  dispatch(iterateId())
+  dispatch(addEntityComponents({id: ent_id, components: components.map((c) => c.toString())}))
+}

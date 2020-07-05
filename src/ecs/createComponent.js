@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-import {addEntity, removeEntity} from './entity'
+import {addEntityComponents, removeEntity} from './entity'
 
 const createComponent = (name, defaults={}) => {
   const addAction = (state, id, data) => {
@@ -23,7 +23,7 @@ const createComponent = (name, defaults={}) => {
       }
     },
     extraReducers: {
-      [addEntity]: (state, action) => {
+      [addEntityComponents]: (state, action) => {
         const {id, components} = action.payload
         if (components.includes(name)) {
           return addAction(state, id, components[name])
