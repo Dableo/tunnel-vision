@@ -25,7 +25,7 @@ const createComponent = (name, defaults={}) => {
     extraReducers: {
       [addEntity]: (state, action) => {
         const {id, components} = action.payload
-        if (components[name]) {
+        if (components.includes(name)) {
           return addAction(state, id, components[name])
         }
       },
