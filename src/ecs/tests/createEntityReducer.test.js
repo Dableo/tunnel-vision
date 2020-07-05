@@ -19,7 +19,7 @@ const entityReducer = createEntityReducer([testComponent], [addSystem])
 const firstEntityAction = addEntity(['component'])
 
 test('initializes with state', () => {
-  expect(entityReducer(undefined, {type: 'someAction'})).toEqual({
+  expect(entityReducer({}, {type: 'someAction'})).toEqual({
     component: []
   })
 })
@@ -28,12 +28,12 @@ test('adds entities', () => {
     type: 'addEntity',
     payload: {id: 0, components: ['component']}
   })
-  expect(entityReducer(undefined, firstEntityAction)).toEqual({
+  expect(entityReducer({}, firstEntityAction)).toEqual({
     component: [{id: 0, value: 0}]
   })
 })
 test('runs systems', () => {
-  const state = entityReducer(undefined, firstEntityAction)
+  const state = entityReducer({}, firstEntityAction)
   expect(entityReducer(state, {type: 'update'})).toEqual({
     component: [{id: 0, value: 1}]
   })

@@ -6,8 +6,7 @@ const createEntityReducer = (components, systems) => {
     obj[c.name] = c.reducer
     return obj
   }, {}))
-  const initialState = componentReducer(undefined, {type: 'initialize'})
-  return reduceReducers(initialState, componentReducer, ...systems)
+  return reduceReducers({}, componentReducer, ...systems)
 }
 
 export default createEntityReducer
