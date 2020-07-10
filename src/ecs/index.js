@@ -3,7 +3,7 @@ import configureEntityStore, {addComponent, removeComponent, addEntity, addEntit
 import createComponent from './createComponent'
 import createSystem from './createSystem'
 import createEntitySelector from './createEntitySelector'
-import {update} from './eventActions'
+import * as events from './eventActions'
 // import {iterateId} from './entitySlice'
 
 // const addComponent = (id, component, data={}) => component.actions.add({id, data})
@@ -27,5 +27,5 @@ export {
   addEntity,
   addEntityComponents,
   removeEntity,
-  update
+  events
 }

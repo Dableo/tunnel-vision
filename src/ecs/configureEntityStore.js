@@ -9,7 +9,7 @@ export const addEntityComponents = createAction('addEntityComponents')
 export const addEntity = (components) => (dispatch, getState) => {
   const ent_id = getState()[entitySlice.name].idIterator
   dispatch(iterateId())
-  dispatch(addEntityComponents({id: ent_id, components: components.map((c) => c.toString())}))
+  dispatch(addEntityComponents({id: ent_id, components}))
 }
 
 export const removeEntity = createAction('removeEntity')

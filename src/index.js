@@ -2,8 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './app/App'
 import store from './app/store'
+import { events } from './ecs'
 import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker'
+
+store.dispatch(events.initialize)
 
 ReactDOM.render(
   <React.StrictMode>

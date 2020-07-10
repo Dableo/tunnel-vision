@@ -1,4 +1,5 @@
 import {configureEntityStore, createComponent, createSystem, addEntity} from '../index'
+import {initialize} from '../eventActions'
 
 const testComponent = createComponent('component', {value: 1})
 const addSystem = createSystem(
@@ -33,13 +34,13 @@ test('initializes with state', () => {
   })
 })
 test('adds entities', () => {
-  store.dispatch(addEntity([testComponent]))
-  store.dispatch(addEntity([testComponent]))
+  store.dispatch(addEntity({[testComponent]: {}}))
+  store.dispatch(addEntity({[testComponent]: {value: 2}}))
   expect(store.getState()).toEqual({
     _entities: {idIterator: 2},
     component: [
       {id: 0, value: 1},
-      {id: 1, value: 1}
+      {id: 1, value: 2}
     ]
   })
 })
@@ -49,13 +50,13 @@ test('runs systems', () => {
     _entities: {idIterator: 2},
     component: [
       {id: 0, value: 4},
-      {id: 1, value: 4}
+      {id: 1, value: 6}
     ]
   })
 })
 test('runs at scale', () => {
   for (let i = 0; i < 100; i++) {
-    store.dispatch(addEntity([testComponent]))
+    store.dispatch(addEntity({[testComponent]: {}}))
   }
   expect((() => {
     const startTime = Date.now()

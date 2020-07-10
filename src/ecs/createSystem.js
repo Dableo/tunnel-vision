@@ -2,7 +2,7 @@ import {createReducer, createSelector} from '@reduxjs/toolkit'
 import createEntitySelector from './createEntitySelector'
 import {mergeById} from 'utility'
 
-const mergeComponents = (state, updates) => {
+const mergeComponents = (state, updates = []) => {
   let draft = {...state}
   updates.forEach(ent => {
     const {id, ...components} = ent
