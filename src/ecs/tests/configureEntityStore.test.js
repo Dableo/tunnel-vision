@@ -1,6 +1,4 @@
-import {createReducer} from '@reduxjs/toolkit'
 import {configureEntityStore, createComponent, createSystem, addEntity} from '../index'
-import entityReducer from '../entity'
 
 const testComponent = createComponent('component', {value: 1})
 const addSystem = createSystem(

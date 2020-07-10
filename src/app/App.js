@@ -1,14 +1,14 @@
 import React from 'react'
-import GlobalStyles from './GlobalStyles.js'
-import Canvas from 'render/Canvas'
+import GlobalStyles from './GlobalStyles'
+import World from 'features/world/World'
 
 function App() {
   return (
     <>
       <GlobalStyles/>
-      <Canvas>
+      <World>
 
-      </Canvas>
+      </World>
     </>
   );
 }

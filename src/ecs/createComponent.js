@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-import {addEntityComponents, removeEntity} from './entity'
+import {addEntityComponents, removeEntity} from './index'
 
 const createComponent = (name, defaults={}) => {
   const addAction = (state, id, data) => {
