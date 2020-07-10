@@ -55,4 +55,13 @@ test('runs systems', () => {
     ]
   })
 })
-
+test('runs at scale', () => {
+  for (let i = 0; i < 100; i++) {
+    store.dispatch(addEntity([testComponent]))
+  }
+  expect((() => {
+    const startTime = Date.now()
+    store.dispatch({type: 'update'})
+    return (Date.now() - startTime)
+  })()).toBeLessThan(200)
+})
