@@ -1,31 +1,29 @@
-import {configureEntityStore, createComponent, createSystem, addEntity} from '../index'
-import {initialize} from '../eventActions'
+import {configureEcsStore, createComponent, createSystem, addEntity} from '../index'
 
 const testComponent = createComponent('component', {value: 1})
+
+const store = configureEcsStore([testComponent])
+
 const addSystem = createSystem(
-  [testComponent],
-  {
-    'update': (entities) => {
-      entities.forEach(entity => {
-        entity[testComponent].value++
-      })
-      return entities
-    }
+  store,
+  [[testComponent]],
+  ([entities]) => {
+    entities.forEach(entity => {
+      entity[testComponent].value++
+    })
+    return entities
   }
 )
 const multiplySystem = createSystem(
-  [testComponent],
-  {
-    'update': (entities) => {
-      entities.forEach(entity => {
-        entity[testComponent].value = entity[testComponent].value * 2
-      })
-      return entities
-    }
+  store,
+  [[testComponent]],
+  ([entities]) => {
+    entities.forEach(entity => {
+      entity[testComponent].value = entity[testComponent].value * 2
+    })
+    return entities
   }
 )
-
-const store = configureEntityStore({components: [testComponent], systems: [addSystem, multiplySystem]})
 
 test('initializes with state', () => {
   expect(store.getState()).toEqual({
@@ -44,8 +42,10 @@ test('adds entities', () => {
     ]
   })
 })
-test('runs systems', () => {
-  store.dispatch({type: 'update'})
+test('works with systems', () => {
+  addSystem.execute()
+  multiplySystem.execute()
+
   expect(store.getState()).toEqual({
     _entities: {idIterator: 2},
     component: [

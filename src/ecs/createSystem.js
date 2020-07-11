@@ -1,49 +1,67 @@
-import {createReducer, createSelector} from '@reduxjs/toolkit'
+import {createReducer, createSelector, createAction} from '@reduxjs/toolkit'
 import createEntitySelector from './createEntitySelector'
+// import actionQueueSelector from './actionQueueSlice'
 import {mergeById} from 'utility'
 
-const mergeComponents = (state, updates = []) => {
-  let draft = {...state}
-  updates.forEach(ent => {
-    const {id, ...components} = ent
-    Object.keys(components).forEach(key => {
-      draft[key] = draft[key] || []
-      draft[key] = mergeById(draft[key], [{id, ...components[key]}])
-      // draft[key] = [...draft[key], {id, ...components[key]}]
-    })
-  })
-  return draft
-  /*
-  updates = [
-    {id: 0, position: {...data}, movement: {...data}}, 
-    {id: 1, position: {...data}, movement: {...data}}
-  ]
-  state = {position: [{id: 0, ...data}, {id: 1, ...data}]}
-  */
+// const mergeComponents = (state, updates = []) => {
+//   let draft = {...state}
+//   updates.forEach(ent => {
+//     const {id, ...components} = ent
+//     Object.keys(components).forEach(key => {
+//       draft[key] = draft[key] || []
+//       draft[key] = mergeById(draft[key], [{id, ...components[key]}])
+//     })
+//   })
+//   return draft
+// }
+export const mergeComponents = createAction('mergeComponents')
 
-}
+export const systemReducer = createReducer({}, {
+  [mergeComponents]: (state, action) => {
+    /*
+      state = {position: [{id: 0, ...data}, {id: 1, ...data}]}
+      updates = [
+        {id: 0, position: {...data}, movement: {...data}}, 
+        {id: 1, position: {...data}, movement: {...data}}
+      ]
+    */
+    const updates = action.payload
+    let draft = {...state}
+    updates.forEach(ent => {
+      const {id, ...components} = ent
+      Object.keys(components).forEach(key => {
+        draft[key] = draft[key] || []
+        draft[key] = mergeById(draft[key], [{id, ...components[key]}])
+      })
+    })
+    return draft
+  }
+})
 
 const createSystem = (
-  select=[],
-  callbacks={},
-  references=[],
+  store,
+  select = [],
+  executeCallback,
 ) => {
-  const entitySelector = createEntitySelector(select)
-  const referenceSelector = createSelector(
-    references.map(components => createEntitySelector(components)),
-    (...references) => references
+  const entitySelector = createSelector(
+    select.map(components => createEntitySelector(components)),
+    (...select) => select
   )
+  const execute = (args) => {
+    const state = store.getState()
+    const actionQueue = []
+    const updates = executeCallback(
+      entitySelector(state),
+      args,
+      (action) => {actionQueue.push(action)}
+    )
+    store.dispatch(mergeComponents(updates))
+    actionQueue.forEach((action) => {store.dispatch(action)})
+  }
 
-  const actions = Object.keys(callbacks).reduce((actions, action) => {
-    return {...actions, [action]: (state, {payload}) => {
-      return mergeComponents(
-        state,
-        callbacks[action](entitySelector(state), payload, referenceSelector(state))
-      )
-    }}
-  }, {})
-  return createReducer({}, actions)
+  return {
+    execute
+  }
 }
 
-export {mergeComponents}
 export default createSystem

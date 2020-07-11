@@ -1,6 +1,6 @@
-import {configureEntityStore} from 'ecs'
+import {configureEcsStore} from 'ecs'
 import * as components from 'data'
 
-export default configureEntityStore({
+export default configureEcsStore({
     components: Object.values(components)
 })

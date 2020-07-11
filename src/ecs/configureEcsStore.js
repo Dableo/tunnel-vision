@@ -1,6 +1,7 @@
 import { configureStore, combineReducers, createAction } from '@reduxjs/toolkit'
 import reduceReducers from 'reduce-reducers'
 import {entitySlice, iterateId} from './entitySlice'
+import {systemReducer} from './createSystem'
 
 export const addComponent = createAction('addComponent', (id, component, data={}) => component.actions.add({id, data}))
 export const removeComponent = createAction('removeComponent', (id, component) => component.actions.remove({id}))
@@ -14,17 +15,17 @@ export const addEntity = (components) => (dispatch, getState) => {
 
 export const removeEntity = createAction('removeEntity')
 
-const createEcsReducer = (components = [], systems = []) => {
+const createEcsReducer = (components = []) => {
   const slices = combineReducers([entitySlice, ...components].reduce((obj, c) => {
     obj[c.name] = c.reducer
     return obj
   }, {}))
-  return reduceReducers({}, slices, ...systems)
+  return reduceReducers({}, slices, systemReducer)
 }
 
-const configureEcsStore = ({components, systems}) => {
+const configureEcsStore = (components) => {
   return configureStore({
-    reducer: createEcsReducer(components, systems),
+    reducer: createEcsReducer(components),
   })
 }
 
