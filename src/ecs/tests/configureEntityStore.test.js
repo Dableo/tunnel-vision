@@ -4,27 +4,6 @@ const testComponent = createComponent('component', {value: 1})
 
 const store = configureEcsStore([testComponent])
 
-const addSystem = createSystem(
-  store,
-  [[testComponent]],
-  ([entities]) => {
-    entities.forEach(entity => {
-      entity[testComponent].value++
-    })
-    return entities
-  }
-)
-const multiplySystem = createSystem(
-  store,
-  [[testComponent]],
-  ([entities]) => {
-    entities.forEach(entity => {
-      entity[testComponent].value = entity[testComponent].value * 2
-    })
-    return entities
-  }
-)
-
 test('initializes with state', () => {
   expect(store.getState()).toEqual({
     _entities: {idIterator: 0},
@@ -43,8 +22,27 @@ test('adds entities', () => {
   })
 })
 test('works with systems', () => {
-  addSystem.execute()
-  multiplySystem.execute()
+  const addSystem = createSystem(
+    [[testComponent]],
+    ([entities]) => {
+      entities.forEach(entity => {
+        entity[testComponent].value++
+      })
+      return entities
+    }
+  )
+  const multiplySystem = createSystem(
+    [[testComponent]],
+    ([entities]) => {
+      entities.forEach(entity => {
+        entity[testComponent].value = entity[testComponent].value * 2
+      })
+      return entities
+    }
+  )
+
+  addSystem.execute(store)
+  multiplySystem.execute(store)
 
   expect(store.getState()).toEqual({
     _entities: {idIterator: 2},

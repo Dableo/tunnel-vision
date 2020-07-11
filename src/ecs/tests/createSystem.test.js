@@ -29,7 +29,6 @@ test('createSystem updates its components', () => {
     reducer: systemReducer
   })
   const testSystem = createSystem(
-    store,
     [['component']],
     ([entities]) => {
       return entities.map(({id, component}) => {
@@ -37,10 +36,32 @@ test('createSystem updates its components', () => {
       })
     }
   )
-  testSystem.execute()
+  testSystem.execute(store)
   expect(store.getState()).toEqual({
     'component': [
       {id: 0, data: 1}
+    ]
+  })
+})
+test('createSystem execute passes args', () => {
+  const store = configureStore({
+    preloadedState: {
+      'component': [
+        {id: 0, data: 0}
+      ]
+    },
+    reducer: systemReducer
+  })
+  const system = createSystem(
+    [['component']],
+    ([entities], passedArg) => {
+      return entities.map(e => ({...e, component: {data: e.component.data + passedArg}}))
+    }
+  )
+  system.execute(store, 5)
+  expect(store.getState()).toEqual({
+    'component': [
+      {id: 0, data: 5}
     ]
   })
 })
@@ -57,16 +78,15 @@ test('createSystem selects multiple entity groups', () => {
     reducer: systemReducer
   })
   const system = createSystem(
-    store,
     [['update'], ['reference']],
-    ([entities, references], payload) => {
+    ([entities, references]) => {
       expect(references).toEqual([{id: 1, reference: {value: 10}}])
       return entities.map((entity) => {
         return {...entity, update: {value: references[0].reference.value}}
       })
     },
   )
-  system.execute()
+  system.execute(store)
   expect(store.getState()).toEqual({
     'update': [
       {id: 0, value: 10}

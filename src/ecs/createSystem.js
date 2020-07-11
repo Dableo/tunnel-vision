@@ -39,7 +39,6 @@ export const systemReducer = createReducer({}, {
 })
 
 const createSystem = (
-  store,
   select = [],
   executeCallback,
 ) => {
@@ -47,7 +46,7 @@ const createSystem = (
     select.map(components => createEntitySelector(components)),
     (...select) => select
   )
-  const execute = (args) => {
+  const execute = (store, args) => {
     const state = store.getState()
     const actionQueue = []
     const updates = executeCallback(
