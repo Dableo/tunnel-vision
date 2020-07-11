@@ -4,7 +4,7 @@ const getComponentData = (component) => {
   const {id, ...data} = component
   return data
 }
-const createEntitySelector = (componentNames) => createSelector(
+const createEntitySelector = (componentNames=[]) => createSelector(
   componentNames.map((c) => state => state[c]),
   (...components) => {
     return components[0].reduce((acc, curr) => {
