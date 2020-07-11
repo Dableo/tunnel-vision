@@ -1,28 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { createSelector } from '@reduxjs/toolkit'
-import Scene from './Scene'
-import { createEntitySelector } from 'ecs'
-import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+
+import Scenes, {sceneEntity} from './Scene'
+import {warriorEntity} from '../warrior'
 
 const WorldSvg = styled.svg`
-    width: 100vw;
-    height: 100vh;
+width: 100vw;
+height: 100vh;
 `
-
-const sceneSelector = createEntitySelector(['scene'])
-const cameraSelector = createSelector(createEntitySelector(['camera', 'position']), (s) => s[0])
-
 const World = ({viewBox, children, ...props}) => {
-    const scenes = useSelector(sceneSelector)
-    const camera = useSelector(cameraSelector)
-    return (
-        <WorldSvg>
-            {scenes.filter(s => s.scene.active === true).map(({scene}) => (
-                <Scene size={scene.size} camera={camera}>
-                </Scene>
-            ))}
-        </WorldSvg>
-    )
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(sceneEntity(20, true))
+    dispatch(warriorEntity(1))
+  }, [dispatch])
+  return (
+    <WorldSvg>
+      <Scenes/>
+    </WorldSvg>
+  )
 }
 export default World
