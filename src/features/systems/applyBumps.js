@@ -1,26 +1,32 @@
-import {createSystem, update} from 'ecs'
+import {createSystem} from 'ecs'
 import {inRange} from 'utility'
 import {position, movement, solid, collision} from 'data'
 
 //reduce movement until mover won't intersect a solid
 //store solids bumped into
-const hitBumps = createSystem(
-  [position, movement, collision],
-  {[update]: (entities, [solids]) => {
-    return entities.map(entity => {
-      let e = {...entity}
-      let lastbumps
-      let bumps = solids.filter(s => inRange(s.position.x, e.position.x, e.position.x + e.movement.dx))
-      while (bumps.length > 0) {
-        lastbumps = bumps
-        e.movement.dx > 0 ? e.movement.dx-- : e.movement.dx++
-        bumps = solids.filter(s => inRange(s.position.x, e.position.x, e.position.x + e.movement.dx))
-      }
-      e.collision.bumps = lastbumps
-      return e
-    });
-  }},
-  [[position, solid]]
+const getBumps = (entity, others) => {
+  const bumps = others.filter(o => inRange(o.position.value, entity.position.value, entity.position.value + entity.movement.value))
+  return bumps.map(b => (b.id))
+}
+export const applyBumpsExecute = ([entities, solids]) => {
+  return entities.map(entity => {
+    let e = {...entity}
+    let others = solids.filter(s => s.id !== e.id)
+    let lastbumps = []
+    let bumps = getBumps(e, others)
+    while (bumps.length > 0) {
+      lastbumps = bumps
+      e.movement.value > 0 ? e.movement.value-- : e.movement.value++
+      bumps = getBumps(e, others)
+    }
+    e.collision.bumps = lastbumps
+    return e
+  });
+}
+
+const applyBumps = createSystem(
+  [[position, movement, collision], [position, solid]],
+  applyBumpsExecute
 )
 
-export default hitBumps
+export default applyBumps

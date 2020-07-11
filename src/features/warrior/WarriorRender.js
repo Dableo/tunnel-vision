@@ -1,8 +1,14 @@
 import React from 'react'
+import reflection from 'features/reflection/Reflection'
+import Healthbar from 'features/health/Health'
 
-const WarriorRender = ({x}) => {
+const WarriorSprite = reflection(props => <rect width="1" height="1" fill="red" {...props}/>)
+const WarriorRender = ({id, x, health}) => {
   return (
-    <rect x={x} width="1" height="1" fill="red"/>
+    <svg id={id} x={x} width="1" height="1">
+      <WarriorSprite/>
+      <Healthbar x="0" y="-.15" height=".15" width="100%" health={health}/>
+    </svg>
   )
 }
 

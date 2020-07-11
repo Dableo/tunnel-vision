@@ -25,7 +25,7 @@ export const systemReducer = createReducer({}, {
         {id: 1, position: {...data}, movement: {...data}}
       ]
     */
-    const updates = action.payload
+    const updates = action.payload || []
     let draft = {...state}
     updates.forEach(ent => {
       const {id, ...components} = ent
@@ -59,6 +59,7 @@ const createSystem = (
   }
 
   return {
+    selector: entitySelector,
     execute
   }
 }

@@ -12,6 +12,9 @@ const GlobalStyles = createGlobalStyle`
       box-sizing: border-box;
       background-color: black;
     }
+    svg svg {
+      overflow: visible
+    }
 `
 
 export default GlobalStyles
