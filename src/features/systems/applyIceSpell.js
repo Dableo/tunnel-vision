@@ -1,7 +1,7 @@
 import {createSystem, removeEntity} from 'ecs'
 import { spell, collision, movement, delay, frozen } from 'data'
 
-const applyAttackDamage = createSystem(
+const applyIceSpell = createSystem(
   [[collision, frozen, movement, delay], [spell, delay]],
   ([entities, spells], args, queue) => {
     let entityDraft = [...entities]
@@ -20,4 +20,4 @@ const applyAttackDamage = createSystem(
   }
 )
 
-export default applyAttackDamage
+export default applyIceSpell

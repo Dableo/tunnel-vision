@@ -23,6 +23,7 @@ import castSpell from './castSpell'
 import moveSpells from './moveSpells'
 import interruptAttack from './interruptAttack'
 import applyIceSpell from './applyIceSpell'
+import applyHealSpell from './applyHealSpell'
 import unfreeze from './unfreeze'
 
 export const registerSystems = (store) => {
@@ -39,6 +40,7 @@ export const registerSystems = (store) => {
     cameraPosition,
     clampPosition,
     setIntersections,
+    applyHealSpell,
     applyIceSpell,
     applyBumpDamage,
     applyAttackDamage,

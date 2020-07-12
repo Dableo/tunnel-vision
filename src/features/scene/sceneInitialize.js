@@ -29,6 +29,7 @@ const getEnemies = (sceneId, sceneSize, density=4, offset=5) => {
 const sceneInitialize = (dispatch, sceneId, size) => {
   const enemyActions = getEnemies(sceneId, size)
   dispatch(activeSpellEntity('ice', 0))
+  dispatch(activeSpellEntity('heal', 0))
   dispatch(warriorEntity(1))
   enemyActions.forEach(e => {dispatch(e)})
   dispatch(addComponent(sceneId, active, {value: true}))

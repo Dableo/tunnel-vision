@@ -22,5 +22,6 @@ export const spellEntity = (spellType, position, size, delay) => {
   })
 }
 export const iceSpellEntity = (position) => spellEntity('ice', position, 3, 3)
+export const healSpellEntity = (position) => spellEntity('heal', position, 2, 3)
 
 export default spellEntity

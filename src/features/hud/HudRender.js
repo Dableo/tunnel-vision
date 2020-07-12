@@ -12,13 +12,19 @@ const CdText = styled.text`
 
 const CooldownIndicator = ({spell, delay, x}) => {
   const icons = {
-    'ice': <rect fill="blue" width=".4" height=".4" x=".3" y=".3"/>
+    'ice': ({x}) => <rect fill="blue" width=".4" height=".4" y=".3" x={x}/>,
+    'heal': ({x}) => <rect fill="red" width=".4" height=".4" y=".3" x={x}/>
   }
+  const keyBinds = {
+    'ice': '1',
+    'heal': '2'
+  }
+  const SpellIcon = icons[spell]
   return (
     <g>
-      <LabelText textAnchor="middle" x={x + .4} y="-.05">1</LabelText>
+      <LabelText textAnchor="middle" x={x + .4} y="-.05">{keyBinds[spell]}</LabelText>
       <rect x={x} y=".1" width=".8" height=".8" fill="rgba(0,0,0,0.2)" stroke="white" strokeWidth=".05" />
-      {icons[spell]}
+      <SpellIcon x={x + .2}/>
       {(delay > 0) && <>
         <rect x={x} y=".1" width=".8" height=".8" fill="rgba(0,0,0,0.6)" />
         <CdText x={x + .4} y={.6} textAnchor="middle">{delay}</CdText>
