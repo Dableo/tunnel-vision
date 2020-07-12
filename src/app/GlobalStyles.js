@@ -16,6 +16,9 @@ const GlobalStyles = createGlobalStyle`
     svg svg {
       overflow: visible
     }
+    #root:focus {
+      outline: none;
+    }
     #no-focus {
       position: fixed;
       display: flex;
