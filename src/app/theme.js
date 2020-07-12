@@ -9,5 +9,6 @@ export default {
       '#8e887c',
     ],
     health: 'red',
+    attackIndicator: 'rgba(255, 0, 0, 0.5)',
   }
 }

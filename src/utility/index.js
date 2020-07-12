@@ -8,3 +8,7 @@ export function mergeById(a1, a2) {
     ...a2.find((item) => (item.id === itm.id))
   }));
 }
+
+export function clamp(value, min, max) {
+  return Math.min(Math.max(parseInt(value), min), max)
+}

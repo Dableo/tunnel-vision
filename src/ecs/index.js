@@ -1,5 +1,5 @@
 // import {createAction} from '@reduxjs/toolkit'
-import configureEcsStore, {addComponent, removeComponent, addEntity, addEntityComponents, removeEntity} from './configureEcsStore'
+import configureEcsStore, {addComponent, removeComponent, addEntity, addEntityComponents, removeEntityComponents, removeEntity} from './configureEcsStore'
 import createComponent from './createComponent'
 import createSystem from './createSystem'
 import createEntitySelector from './createEntitySelector'
@@ -26,6 +26,7 @@ export {
   createEntitySelector,
   addEntity,
   addEntityComponents,
+  removeEntityComponents,
   removeEntity,
   events
 }

@@ -96,3 +96,22 @@ test('createSystem selects multiple entity groups', () => {
     ]
   })
 })
+test('createSystem can send dispatch', () => {
+  const store = configureStore({
+    preloadedState: {
+      'component': [
+        {id: 0, value: 'old'}
+      ],
+    },
+    reducer: systemReducer
+  })
+  const system = createSystem([['component']], (ents, args, queue) => {
+    queue(mergeComponents([{id: 0, 'component': {value: 'new'}}]))
+  })
+  system.execute(store)
+  expect(store.getState()).toEqual({
+    'component': [
+      {id: 0, value: 'new'}
+    ],
+  })
+})

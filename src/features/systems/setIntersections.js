@@ -1,24 +1,22 @@
-import {createSystem, update} from 'ecs'
-import {position, collision} from 'data'
+import {createSystem} from 'ecs'
+import {position, size, collision} from 'data'
 
 //store list of all intersections
-const setIntersections = createSystem({
-  select: [position, collision],
-  [update]: (entities) => {
+const setIntersections = createSystem(
+  [[position, size, collision]],
+  ([entities]) => {
     let tiles = []
     entities.forEach(e => {
-      const x = e.position.x
-      tiles[x] ? tiles[x].push(e.id) : tiles[x] = [e.id]
-    });
-    return entities.map(({id, position, collision}) => {
-      const intersections = tiles[position.x] ? tiles[position.x] : []
-      return {
-        id,
-        position,
-        collision: {...collision, intersections}
+      for(let i = 0; i < e.size.value; i++) {
+        const x = e.position.value + i
+        tiles[x] ? tiles[x].push(e.id) : tiles[x] = [e.id]
       }
+    });
+    return entities.map((e) => {
+      const intersections = tiles[e.position.value] ? tiles[e.position.value] : []
+      return {...e, collision: {...e.collision, intersections: intersections.filter(id => id !== e.id)}}
     })
   }
-})
+)
 
 export default setIntersections

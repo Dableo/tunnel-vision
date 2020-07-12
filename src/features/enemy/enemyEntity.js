@@ -1,14 +1,20 @@
 import {addEntity, createEntitySelector} from 'ecs'
 
-export const enemyEntity = (position=0, health=3) => {
+export const enemyEntity = (sceneId, type='skeleton', position=0, health=3) => {
   return addEntity({
-    'enemy': {}, 
+    [type]: {},
+    'enemy': {type: type},
+    'inScene': {value: sceneId},
     'size': {value: 1}, 
     'position': {value: position},
     'movement': {},
-    // 'collision': {},
+    'collision': {},
     'solid': {},
     'health': {value: health},
+    'delay': {value: 0},
+    'animationState': {}
   })
 }
-export const enemyEntitySelector = createEntitySelector(['enemy', 'size', 'position', 'health'])
+export const enemyEntitySelector = createEntitySelector(['enemy', 'size', 'position', 'health', 'animationState'])
+
+export default enemyEntity

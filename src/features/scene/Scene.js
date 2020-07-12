@@ -6,18 +6,16 @@ import { createSelector } from '@reduxjs/toolkit'
 
 import Warrior from '../warrior'
 import Enemy from '../enemy'
-import reflection from 'features/reflection/Reflection'
+import reflection from 'features/render/reflection'
+import {cameraEntity, cameraEntitySelector} from 'features/camera/cameraEntity'
+import Camera from 'features/camera/Camera'
+import Attack from 'features/attack/Attack'
 
-const cameraEntity = (size=10) => {
-  return addEntity({'camera': {}, 'size': {value: size}, 'position': {}})
-}
-const cameraEntitySelector = createSelector(createEntitySelector(['camera', 'size', 'position']), (s) => s[0])
-
+const cameraSelector = createSelector(cameraEntitySelector, c => c[0])
 export const sceneEntity = (size=20, active=false) => {
   return addEntity({'scene': {}, 'size': {value: size}, 'active': {value: active}})
 }
 export const sceneEntitySelector = createEntitySelector(['scene', 'size', 'active'])
-
 
 const tilePalette = [
   '#161001',
@@ -52,17 +50,20 @@ const ReflectionMask = ({id, width, y, height}) => {
 }
 
 const Scene = ({id, size}) => {
-  const camera = useSelector(cameraEntitySelector)
+  const camera = useSelector(cameraSelector)
   return (
     <svg id={id} viewBox={`0 0 ${camera ? camera.size.value : 5} 3`}>
-      <g transform={`translate(${camera ? camera.position.value : 0})`}>
+      <Camera>
         <Background id={id} width={size} height="1.5"/>
         <g transform="translate(0 .5)">
-          <Warrior />
           <Enemy />
+          <Warrior />
         </g>
         <ReflectionMask id={id} width={size} height="1.5" y="1.5"/>
-      </g>
+        <g transform="translate(0 .5)">
+          <Attack />
+        </g>
+      </Camera>
     </svg>
   )
 }

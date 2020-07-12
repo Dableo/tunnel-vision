@@ -1,9 +1,14 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 import {addEntityComponents, removeEntity} from './index'
+import { removeEntityComponents } from './configureEcsStore'
 
 const createComponent = (name, defaults={}) => {
-  const addAction = (state, id, data) => {
+  const addAction = (state, id, data={}) => {
+    const ent = state.find(c => c.id === id) 
+    if (ent) {
+      return [...state.filter(c => c.id !== id), {...ent, ...data}]
+    }
     return [...state, {id, ...defaults, ...data}]
   }
   const removeAction = (state, id) => {
@@ -27,6 +32,12 @@ const createComponent = (name, defaults={}) => {
         const {id, components} = action.payload
         if (components[name]) {
           return addAction(state, id, components[name])
+        }
+      },
+      [removeEntityComponents]: (state, action) => {
+        const {id, components} = action.payload
+        if (components.includes(name)) {
+          return removeAction(state, id)
         }
       },
       [removeEntity]: (state, action) => {

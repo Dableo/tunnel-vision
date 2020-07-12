@@ -1,0 +1,5 @@
+<svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2">
+  <path fill="none" d="M0 0h160v160H0z"/>
+  <path d="M48 160v-56l8-8h48l8 8v56H48z" fill="#697a8a"/>
+  <path d="M56 136v-24h8l8 8-8 8 8 8h-8v-8l-8 8zM80 112v8l-8 16h8v-8l8-16h-8zM104 120l-8-8h-8v24l8-16v8l8-8z" fill="#2b3238"/>
+</svg>

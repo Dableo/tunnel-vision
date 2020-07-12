@@ -6,7 +6,7 @@ const applyBumpDamage = createSystem([[health], [collision, damage]],
   ([targets, attackers]) => {
     let damage = {}
     attackers.forEach((attacker) => {
-      const target = targets.find(t => attacker.collision.bumps.includes(t.id))
+      const target = targets.find(t => attacker.collision.bumps.map(b => b[0]).includes(t.id))
       if (target) {
         damage[target.id] = damage[target.id] ? damage[target.id] + attacker.damage.value : attacker.damage.value
       }
