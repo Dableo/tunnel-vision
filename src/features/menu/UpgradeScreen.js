@@ -25,7 +25,7 @@ const UpgradeScreen = () => {
       <g>
         <TitleText x="4" y="1" textAnchor="middle">Level cleared!</TitleText>
         <DescriptionText x="4" y="1.75" textAnchor="middle">This is where spell upgrades would happen if I had time...</DescriptionText>
-        <CtaText x="4" y="2.5" textAnchor="middle">Press a key to start!</CtaText>
+        <CtaText x="4" y="2.5" textAnchor="middle">Press a key to proceed!</CtaText>
       </g>
     </svg>
   )
