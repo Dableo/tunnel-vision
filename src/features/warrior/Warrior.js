@@ -10,6 +10,7 @@ const Warrior = (props) => {
     id={warrior.id}
     x={warrior.position.value}
     health={warrior.health.value}
+    frozen={warrior.frozen.value}
   />)
 }
 

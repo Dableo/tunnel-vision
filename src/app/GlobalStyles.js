@@ -11,9 +11,27 @@ const GlobalStyles = createGlobalStyle`
     body {
       box-sizing: border-box;
       background-color: black;
+      font-family: sans-serif;
     }
     svg svg {
       overflow: visible
+    }
+    #no-focus {
+      position: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      color: white;
+      font-size: 1vw;
+      pointer-events: none;
+    }
+    #root:focus ~ #no-focus {
+      opacity: 0;
     }
 `
 

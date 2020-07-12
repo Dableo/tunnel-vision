@@ -8,7 +8,8 @@ export const attackEntity = (ownerId=0, position=0, size=1, damage=1, delay=1) =
     'collision': {},
     'damage': {value: damage},
     'delay': {value: delay},
-    'ownerId': {value: ownerId}
+    'ownerId': {value: ownerId},
+    'inScene': {value: true},
   })
 }
 export const attackEntitySelector = createEntitySelector(['attack', 'size', 'position', 'damage', 'delay', 'ownerId'])

@@ -7,12 +7,12 @@ import * as serviceWorker from './serviceWorker'
 
 import registerSystems from 'features/systems'
 
-registerSystems(store)
+const gameLoop = registerSystems(store)
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <App gameLoop={gameLoop}/>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

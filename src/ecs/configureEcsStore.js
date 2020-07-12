@@ -21,17 +21,17 @@ export const addEntity = (components) => (dispatch, getState) => {
 
 export const removeEntity = createAction('removeEntity', (id) => ({payload: {id}}))
 
-const createEcsReducer = (components = []) => {
-  const slices = combineReducers([entitySlice, ...components].reduce((obj, c) => {
+const createEcsReducer = (components = [], extraSlices = []) => {
+  const slices = combineReducers([entitySlice, ...components, ...extraSlices].reduce((obj, c) => {
     obj[c.name] = c.reducer
     return obj
   }, {}))
   return reduceReducers({}, slices, systemReducer)
 }
 
-const configureEcsStore = (components) => {
+const configureEcsStore = (components, extraSlices) => {
   return configureStore({
-    reducer: createEcsReducer(components),
+    reducer: createEcsReducer(components, extraSlices),
   })
 }
 

@@ -1,27 +1,53 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import Scenes, {sceneEntity} from '../scene/Scene'
-import {warriorEntity} from '../warrior'
-import {enemyEntity} from '../enemy'
+import StartScreen from 'features/menu/StartScreen'
+import UpgradeScreen from 'features/menu/UpgradeScreen'
+import GameOverScreen from 'features/menu/GameOverScreen'
+import cameraEntity from 'features/camera/cameraEntity'
+import sceneEntity from 'features/scene/sceneEntity'
+import Scenes from 'features/scene/Scene'
 
 const WorldSvg = styled.svg`
 width: 100vw;
 height: 100vh;
 `
-const World = ({viewBox, children, ...props}) => {
+const World = ({gameLoop, ...props}) => {
   const dispatch = useDispatch()
+  const {level, route} = useSelector(state => state.game)
+  
+  const difficulty = useRef(level)
+
   useEffect(() => {
-    dispatch(sceneEntity(20, true))
-    dispatch(warriorEntity(0, 1))
-    dispatch(enemyEntity(0, 'skeleton', 5))
-    dispatch(enemyEntity(0, 'skeleton', 7))
-    dispatch(enemyEntity(0, 'wizard', 9))
+    difficulty.current = level
+  }, [difficulty, level])
+
+  useEffect(() => {
+    dispatch(cameraEntity())
   }, [dispatch])
+  
+  useEffect(() => {
+    if (route === 'scene') {
+      const sceneSize = 10 + difficulty.current * 5
+      const tickSpeed = Math.max(300, 1050 - difficulty.current * 50)
+      dispatch(sceneEntity(sceneSize))
+      gameLoop.start(tickSpeed)
+    } else {
+      gameLoop.stop()
+    }
+  }, [route, difficulty, dispatch, gameLoop])
+  
+  const routes = {
+    'start': <StartScreen/>,
+    'scene': <Scenes/>,
+    'upgrade': <UpgradeScreen/>,
+    'gameOver': <><Scenes/><GameOverScreen/></>
+  }
+  
   return (
     <WorldSvg>
-      <Scenes/>
+      {routes[route]}
     </WorldSvg>
   )
 }

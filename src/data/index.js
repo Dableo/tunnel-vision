@@ -1,5 +1,6 @@
 import {createComponent} from 'ecs'
 
+export const initialize = createComponent('initialize')
 export const enemy = createComponent('enemy')
 export const warrior = createComponent('warrior')
 export const skeleton = createComponent('skeleton')
@@ -21,4 +22,8 @@ export const attack = createComponent('attack')
 export const delay = createComponent('delay', {value: 1})
 export const ownerId = createComponent('ownerId', {value: 0})
 export const inScene = createComponent('inScene', {value: false})
+export const sceneEnd = createComponent('sceneEnd')
+export const spell = createComponent('spell', {value: 'ice'})
+export const activeSpell = createComponent('activeSpell', {value: 'ice'})
 export const animationState = createComponent('animationState', {value: false})
+export const frozen = createComponent('frozen', {value: false})

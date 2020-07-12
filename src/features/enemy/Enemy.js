@@ -21,7 +21,7 @@ const Enemy = (props) => {
     id={enemy.id}
     x={enemy.position.value}
     health={enemy.health.value}
-    animationState={enemy.animationState.value}
+    frozen={enemy.frozen.value}
   />)
 }
 

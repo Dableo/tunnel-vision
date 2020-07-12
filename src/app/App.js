@@ -4,13 +4,11 @@ import World from 'features/world/World'
 import theme from './theme'
 import {ThemeProvider} from 'styled-components'
 
-function App() {
+const App = ({gameLoop}) => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles/>
-      <World>
-
-      </World>
+      <World gameLoop={gameLoop} />
     </ThemeProvider>
   );
 }

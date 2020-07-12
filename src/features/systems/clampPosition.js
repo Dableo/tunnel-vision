@@ -5,7 +5,11 @@ import {clamp} from 'utility'
 const clampPosition = createSystem(
   [[position, size, inBounds], [scene, active, size]],
   ([entities, scenes]) => {
-    const sceneSize = scenes.find(s => s.active.value === true).size.value
+    const activeScenes = scenes.find(s => s.active.value === true)
+    if (!activeScenes || activeScenes.length === 0) {
+      return
+    }
+    const sceneSize = activeScenes.size.value
     return entities.map(e => {
       const entPos = e.position.value
       const entSize = e.size.value

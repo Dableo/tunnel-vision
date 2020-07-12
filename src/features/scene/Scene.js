@@ -1,21 +1,19 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-
-import {addEntity, createEntitySelector} from 'ecs'
 import { createSelector } from '@reduxjs/toolkit'
 
+import {sceneEntitySelector} from './sceneEntity'
 import Warrior from '../warrior'
 import Enemy from '../enemy'
 import reflection from 'features/render/reflection'
-import {cameraEntity, cameraEntitySelector} from 'features/camera/cameraEntity'
+import {cameraEntitySelector} from 'features/camera/cameraEntity'
 import Camera from 'features/camera/Camera'
 import Attack from 'features/attack/Attack'
+import Spells from 'features/spells/Spells'
+import sceneInitialize from './sceneInitialize'
+import Hud from 'features/hud/Hud'
 
 const cameraSelector = createSelector(cameraEntitySelector, c => c[0])
-export const sceneEntity = (size=20, active=false) => {
-  return addEntity({'scene': {}, 'size': {value: size}, 'active': {value: active}})
-}
-export const sceneEntitySelector = createEntitySelector(['scene', 'size', 'active'])
 
 const tilePalette = [
   '#161001',
@@ -24,9 +22,9 @@ const tilePalette = [
   '#676156',
   '#8e887c',
 ]
-const Background = ({id, width, height}) => {
+export const Background = ({id, width, height}) => {
   const tiles = [...tilePalette, ...[...tilePalette].reverse().slice(1)]
-  const BackgroundSprite = reflection(props => <rect x='0' y='0' width="100%" height="100%" fill={`url(#${id}-background-pattern)`}/>)
+  const BackgroundSprite = reflection(props => <rect className={props.className} x='0' y='0' width="100%" height="100%" fill={`url(#${id}-background-pattern)`}/>)
   return (
     <svg width={width} height={height}>
       <pattern id={id + "-background-pattern"} x="0" y="0" width={tiles.length} height={height} patternUnits="userSpaceOnUse" >
@@ -37,7 +35,7 @@ const Background = ({id, width, height}) => {
   )
 }
 
-const ReflectionMask = ({id, width, y, height}) => {
+export const ReflectionMask = ({id, width, y, height}) => {
   return (
     <>
       <linearGradient id={id + "-reflection-gradient"} x1="0%" y1="0%" x2="0%" y2="100%">
@@ -50,9 +48,13 @@ const ReflectionMask = ({id, width, y, height}) => {
 }
 
 const Scene = ({id, size}) => {
+  const dispatch = useDispatch()
   const camera = useSelector(cameraSelector)
+  useEffect(() => {
+    sceneInitialize(dispatch, id, size)
+  }, [id, dispatch, size])
   return (
-    <svg id={id} viewBox={`0 0 ${camera ? camera.size.value : 5} 3`}>
+    <svg id={id} viewBox={`0 0 ${camera ? camera.size.value : 8} 3`}>
       <Camera>
         <Background id={id} width={size} height="1.5"/>
         <g transform="translate(0 .5)">
@@ -62,22 +64,19 @@ const Scene = ({id, size}) => {
         <ReflectionMask id={id} width={size} height="1.5" y="1.5"/>
         <g transform="translate(0 .5)">
           <Attack />
+          <Spells />
         </g>
       </Camera>
+      <g transform="translate(0 2.25)">
+        <Hud height=".75"/>
+      </g>
     </svg>
   )
 }
 
 const Scenes = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(cameraEntity())
-  }, [dispatch])
-
   const scenes = useSelector(sceneEntitySelector)
-
-  return scenes.filter(s => s.active.value === true)
-    .map((scene) => <Scene key={scene.id} id={scene.id} size={scene.size.value}></Scene>)
+  return scenes.map((scene) => <Scene key={scene.id} id={scene.id} size={scene.size.value} />)
 }
 
 export default Scenes

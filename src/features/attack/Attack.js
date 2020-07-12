@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import {attackEntitySelector} from './attackEntity'
 import AttackRender from './AttackRender'
 
-const Warrior = (props) => {
+const Attack = (props) => {
   const attacks = useSelector(attackEntitySelector)
   return attacks.map(attack => <AttackRender
     key={attack.id}
@@ -15,4 +15,4 @@ const Warrior = (props) => {
   />)
 }
 
-export default Warrior
+export default Attack

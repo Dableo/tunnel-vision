@@ -10,5 +10,6 @@ export default {
     ],
     health: 'red',
     attackIndicator: 'rgba(255, 0, 0, 0.5)',
+    spellIndicator: 'rgba(0, 0, 255, 0.5)',
   }
 }

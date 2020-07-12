@@ -1,9 +1,9 @@
 import {addEntity, createEntitySelector} from 'ecs'
 
-export const warriorEntity = (sceneId, position=0, health=3, damage=1) => {
+export const warriorEntity = (position=0, health=3, damage=1) => {
   return addEntity({
     'warrior': {},
-    'inScene': {value: sceneId},
+    'inScene': {value: true},
     'size': {value: 1},
     'position': {value: position},
     'movement': {},
@@ -12,9 +12,11 @@ export const warriorEntity = (sceneId, position=0, health=3, damage=1) => {
     'solid': {},
     'health': {value: health},
     'damage': {value: damage},
-    'inBounds': {}
+    'inBounds': {},
+    'delay': {value: 0},
+    'frozen': {}
   })
 }
-export const warriorEntitySelector = createEntitySelector(['warrior', 'size', 'position', 'health', 'collision'])
+export const warriorEntitySelector = createEntitySelector(['warrior', 'size', 'position', 'health', 'collision', 'frozen'])
 
 export default warriorEntity

@@ -6,5 +6,4 @@ const killEnemy = createSystem([[enemy, dead]], ([entities], args, queue) => {
     queue(removeEntityComponents(e.id, [solid, movement]))
   })
 })
-
 export default killEnemy

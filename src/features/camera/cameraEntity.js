@@ -1,6 +1,6 @@
 import {addEntity, createEntitySelector} from 'ecs'
 
-export const cameraEntity = (size=10, active=false) => {
+export const cameraEntity = (size=10, active=true) => {
   return addEntity({
     'camera': {},
     'size': {value: size},
