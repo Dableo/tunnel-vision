@@ -11,7 +11,7 @@ const castSpell = createSystem(
     const activeIce = activeSpells.find(s => s.activeSpell.value === 'ice')
     if (key === 'Digit1' && activeIce && activeIce.delay.value <= 0) {
       queue(iceSpellEntity(defaultSpellPosition))
-      activeSpellDraft.push({...activeIce, delay: {value: 6}})
+      activeSpellDraft.push({...activeIce, delay: {value: 5}})
     }
     return activeSpellDraft
   }

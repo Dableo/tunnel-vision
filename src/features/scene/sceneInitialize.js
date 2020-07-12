@@ -6,7 +6,7 @@ import { addComponent } from 'ecs'
 import sceneEndEntity from './sceneEndEntity'
 import {activeSpellEntity} from 'features/spells/spellEntity'
 
-const getEnemies = (sceneId, sceneSize, density=5, offset=5) => {
+const getEnemies = (sceneId, sceneSize, density=4, offset=5) => {
   const enemyDistribution = [
     'skeleton',
     'skeleton',
@@ -21,7 +21,7 @@ const getEnemies = (sceneId, sceneSize, density=5, offset=5) => {
   const enemies = []
   for (let index = 0; index < (sceneSize - offset) / density; index++) {
     const enemy = enemyDistribution[Math.floor(Math.random() * enemyDistribution.length)]
-    enemies.push(enemyMap[enemy](Math.floor(Math.random() * density * index + offset)))
+    enemies.push(enemyMap[enemy]((density * index) + offset + (Math.floor(Math.random() * (density - 1)))))
   }
   return enemies
 }

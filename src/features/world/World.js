@@ -30,7 +30,7 @@ const World = ({gameLoop, ...props}) => {
   useEffect(() => {
     if (route === 'scene') {
       const sceneSize = 10 + difficulty.current * 5
-      const tickSpeed = Math.max(300, 1050 - difficulty.current * 50)
+      const tickSpeed = Math.max(300, 1050 - difficulty.current * 150)
       dispatch(sceneEntity(sceneSize))
       gameLoop.start(tickSpeed)
     } else {
