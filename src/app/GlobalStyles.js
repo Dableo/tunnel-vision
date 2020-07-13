@@ -8,6 +8,9 @@ const GlobalStyles = createGlobalStyle`
       padding: 0;
       box-sizing: inherit;
     }
+    html {
+      overflow: hidden;
+    }
     body {
       box-sizing: border-box;
       background-color: black;
